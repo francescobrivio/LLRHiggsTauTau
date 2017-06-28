@@ -26,7 +26,7 @@ USE_NOHFMET = False # True to exclude HF and run on silver json
 SVFITBYPASS=False # use SVFitBypass module, no SVfit computation, adds dummy userfloats for MET and SVfit mass
 BUILDONLYOS=False #If true don't create the collection of SS candidates (and thus don't run SV fit on them)
 APPLYTESCORRECTION=False # shift the central value of the tau energy scale before computing up/down variations
-COMPUTEUPDOWNSVFIT=True # compute SVfit for up/down TES variation
+COMPUTEUPDOWNSVFIT=False # compute SVfit for up/down TES variation
 doCPVariables=False # compute CP variables and PV refit
 COMPUTEQGVAR = False # compute QG Tagger for jets
 IsMC=True
@@ -71,19 +71,34 @@ process.source = cms.Source("PoolSource",
     #'/store/mc/RunIISpring16MiniAODv2/SMS-TChiHH_HToBB_HToTauTau_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16Fast_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/00000/0264645E-5E12-E711-889B-E41D2D08DD10.root',
     # '/store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/60000/4CBBCFDF-F8C6-E611-A5C2-6CC2173BBD40.root',
     # '/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/00000/AC8AA010-88BB-E611-9974-FA163E1B885B.root',
-    '/store/mc/RunIISummer16MiniAODv2/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/80000/80EA9B8A-A1C1-E611-A107-20CF3027A61A.root',
+    #'/store/mc/RunIISummer16MiniAODv2/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/80000/80EA9B8A-A1C1-E611-A107-20CF3027A61A.root',
     # '/store/data/Run2016B/SingleMuon/MINIAOD/23Sep2016-v3/120000/E6D5D5EB-8299-E611-83D1-FA163EB4F61D.root',
     #'/store/data/Run2016C/SingleMuon/MINIAOD/23Sep2016-v1/80000/F8F49A79-BE89-E611-A029-008CFA1974E4.root'
     #'/store/data/Run2016B/SingleMuon/MINIAOD/PromptReco-v2/000/273/150/00000/34A57FB8-D819-E611-B0A4-02163E0144EE.root', #80X data
     # '/store/mc/RunIISpring16MiniAODv1/GluGluToBulkGravitonToHHTo2B2Tau_M-400_narrow_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3_ext1-v1/30000/06E22BEA-9F10-E611-9862-1CB72C0A3A5D.root', #80X MC
     # '/store/mc/RunIIFall15MiniAODv2/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/50000/12184969-3DB8-E511-879B-001E67504A65.root', #76X MC
+	
+	
+	# - DATASETS -
+	# data    : /SingleMuon/Run2016F-03Feb2017-v1/MINIAOD
+	# signal1 : /GluGluToRadionToHHTo2B2Tau_M-300_narrow_13TeV-madgraph/RunIISummer16MiniAODv2-FlatPU28to62HcalNZSRAW_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM
+	# signal2 : /GluGluToRadionToHHTo2B2Tau_M-500_narrow_13TeV-madgraph/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM
+	# bkgr1   : /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/MINIAODSIM
+	# bkgr2   : /TTToSemilepton_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM
+	
+	# - FILES -
+	#'/store/data/Run2016F/SingleMuon/MINIAOD/03Feb2017-v1/100000/00E6AB6D-BCEC-E611-8F6E-0025905C3D98.root',
+	'/store/mc/RunIISummer16MiniAODv2/GluGluToRadionToHHTo2B2Tau_M-270_narrow_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/E8729C09-A1DE-E611-9CB3-0CC47A4C8E66.root', #49k
+	#'/store/mc/RunIISummer16MiniAODv2/GluGluToRadionToHHTo2B2Tau_M-500_narrow_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/B661A261-A2DB-E611-A61D-44A84223FF3C.root', #49k
+	#'/store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/120000/02A210D6-F5C3-E611-B570-008CFA197BD4.root', #136k
+	#'/store/mc/RunIISummer16MiniAODv2/TTToSemilepton_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0031D8B1-F1C9-E611-914A-047D7B416516.root', #88k
     )
 )
 
 # process.source.skipEvents = cms.untracked.uint32(968)
 
 #Limited nEv for testing purposes. -1 to run all events
-process.maxEvents.input = 1000
+process.maxEvents.input = 200
 
 # JSON mask for data --> defined in the lumiMask file
 # from JSON file
@@ -95,7 +110,7 @@ process.maxEvents.input = 1000
 ## Output file
 ##
 
-process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis.root'))
+process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis_TEST.root'))
 
 if DO_ENRICHED:
     process.out = cms.OutputModule("PoolOutputModule",

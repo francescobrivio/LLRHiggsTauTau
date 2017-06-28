@@ -157,8 +157,12 @@ import re
 #tag = "MC_gravitons_24Apr2017"
 #datasetsFile = "datasets.txt"
 
-PROCESS = ["MC80XRSGRAVITON"]
-tag = "MC_gravitonsRS_29Apr2017"
+#PROCESS = ["MC80XRSGRAVITON"]
+#tag = "MC_gravitonsRS_29Apr2017"
+#datasetsFile = "datasets.txt"
+
+PROCESS = ["LEGACYTEST"]
+tag = "MC_Radion300_28Giu2017"
 datasetsFile = "datasets.txt"
 
 isMC = True
@@ -291,7 +295,7 @@ for dtset in dtsetToLaunch:
     command += " General.requestName=%s" % (shortName + "_" + str(counter))
     command += " General.workArea=%s" % crabJobsFolder
     command += " Data.inputDataset=%s" % dtset
-    command += " Data.outLFNDirBase=/store/user/lcadamur/HHNtuples/%s/%s" % (tag , str(counter)+"_"+dtsetNames)
+    command += " Data.outLFNDirBase=/store/user/fbrivio/Hhh_1718/%s/%s" % (tag , str(counter)+"_"+dtsetNames) # change to where you want to stage you ntuples
     command += " Data.outputDatasetTag=%s" % (shortName + "_" + tag + "_" + str(counter))
     if (EnrichedToNtuples): command += " Data.inputDBS=phys03" # if I published the dataset need to switch from global (default)
     if (EnrichedToNtuples): command += " JobType.psetName=ntuplizer.py" # run a different python config for enriched
