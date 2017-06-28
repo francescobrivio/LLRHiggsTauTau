@@ -434,15 +434,18 @@ void SVfitInterface::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if ( algo.isValidSolution() )
       {
         SVfitMass = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getMass(); // full mass of tau lepton pair in units of GeV
+		SVfitTransverseMass = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getTransverseMass();
 		SVpt      = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getPt();
 		SVeta     = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getEta();
 		SVphi     = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getPhi();
 		SVptUnc   = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getPtUncert();
 		SVetaUnc  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getEtaUncert();
 		SVphiUnc  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getPhiUncert();
-		//SVMETRho  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->;
-		//SVMETPhi  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->;
-		SVfitTransverseMass = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algo.getMCQuantitiesAdapter())->getTransverseMass();
+		
+		ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystem(SVpt, SVeta, SVphi, SVfitMass);
+		Vector fittedMET = (fittedDiTauSystem.Vect() - (algo.measuredDiTauSystem()).Vect());
+		SVMETRho = fittedMET.Rho();
+		SVMETPhi = fittedMET.Phi();
 
 		/*SVfitMass = algo.getMass(); // return value is in units of GeV
         SVpt = algo.pt();
@@ -479,9 +482,12 @@ void SVfitInterface::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			SVptUncTauUp   = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getPtUncert();
 			SVetaUncTauUp  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getEtaUncert();
 			SVphiUncTauUp  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getPhiUncert();
-			//SVMETRhoTauUp  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->;
-			//SVMETPhiTauUp  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->;
 			SVfitTransverseMassTauUp = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getTransverseMass();
+			
+			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemUp(SVptUp, SVetaUp, SVphiUp, SVfitMassUp);
+			Vector fittedMETUp = (fittedDiTauSystemUp.Vect() - (algoTauUp.measuredDiTauSystem()).Vect());
+			SVMETRhoUp = fittedMETUp.Rho();
+			SVMETPhiUp = fittedMETUp.Phi();
 			
           /*SVfitMassTauUp = algoTauUp.getMass(); // return value is in units of GeV
           SVptTauUp = algoTauUp.pt();
@@ -513,9 +519,12 @@ void SVfitInterface::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			SVptUncTauDown   = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getPtUncert();
 			SVetaUncTauDown  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getEtaUncert();
 			SVphiUncTauDown  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getPhiUncert();
-			//SVMETRhoTauDown  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->;
-			//SVMETPhiTauDown  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->;
 			SVfitTransverseMassTauDown = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getTransverseMass();
+			
+			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemDown(SVptDown, SVetaDown, SVphiDown, SVfitMassDown);
+			Vector fittedMETDown = (fittedDiTauSystemDown.Vect() - (algoTauDown.measuredDiTauSystem()).Vect());
+			SVMETRhoDown = fittedMETDown.Rho();
+			SVMETPhiDown = fittedMETDown.Phi();
 			
           /*SVfitMassTauDown = algoTauDown.getMass(); // return value is in units of GeV
           SVptTauDown = algoTauDown.pt();
