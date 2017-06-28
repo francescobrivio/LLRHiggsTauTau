@@ -484,10 +484,10 @@ void SVfitInterface::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			SVphiUncTauUp  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getPhiUncert();
 			SVfitTransverseMassTauUp = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauUp.getMCQuantitiesAdapter())->getTransverseMass();
 			
-			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemUp(SVptUp, SVetaUp, SVphiUp, SVfitMassUp);
+			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemUp(SVptTauUp, SVetaTauUp, SVphiTauUp, SVfitMassTauUp);
 			Vector fittedMETUp = (fittedDiTauSystemUp.Vect() - (algoTauUp.measuredDiTauSystem()).Vect());
-			SVMETRhoUp = fittedMETUp.Rho();
-			SVMETPhiUp = fittedMETUp.Phi();
+			SVMETRhoTauUp = fittedMETUp.Rho();
+			SVMETPhiTauUp = fittedMETUp.Phi();
 			
           /*SVfitMassTauUp = algoTauUp.getMass(); // return value is in units of GeV
           SVptTauUp = algoTauUp.pt();
@@ -521,10 +521,10 @@ void SVfitInterface::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 			SVphiUncTauDown  = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getPhiUncert();
 			SVfitTransverseMassTauDown = static_cast<svFitStandalone::MCPtEtaPhiMassAdapter*>(algoTauDown.getMCQuantitiesAdapter())->getTransverseMass();
 			
-			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemDown(SVptDown, SVetaDown, SVphiDown, SVfitMassDown);
+			ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > fittedDiTauSystemDown(SVptTauDown, SVetaTauDown, SVphiTauDown, SVfitMassTauDown);
 			Vector fittedMETDown = (fittedDiTauSystemDown.Vect() - (algoTauDown.measuredDiTauSystem()).Vect());
-			SVMETRhoDown = fittedMETDown.Rho();
-			SVMETPhiDown = fittedMETDown.Phi();
+			SVMETRhoTauDown = fittedMETDown.Rho();
+			SVMETPhiTauDown = fittedMETDown.Phi();
 			
           /*SVfitMassTauDown = algoTauDown.getMass(); // return value is in units of GeV
           SVptTauDown = algoTauDown.pt();
