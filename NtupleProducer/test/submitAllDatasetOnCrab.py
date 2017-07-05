@@ -161,8 +161,14 @@ import re
 #tag = "MC_gravitonsRS_29Apr2017"
 #datasetsFile = "datasets.txt"
 
-PROCESS = ["LEGACYTEST"]
-tag = "MC_Radion300_28Giu2017"
+#PROCESS = ["DATALEGACYTEST"]
+#tag = "Legacy_Lug2017"
+#datasetsFile = "datasets.txt"
+
+PROCESS = ["MCLEGACYTEST"]
+#tag = "Legacy_Radion300_Lug2017"
+tag = "Legacy_DY_Lug2017"
+tag = "Legacy_SMhh_Lug2017"
 datasetsFile = "datasets.txt"
 
 isMC = True
@@ -195,6 +201,8 @@ isMC = True
 # lumiMaskFileName = "15lug_NoL1TJSON_diff_8lugJSON.txt"
 # lumiMaskFileName = "20lug_NoL1TJSON_diff_15lug_NoL1TJSON.txt"
 lumiMaskFileName = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
+#lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
+#xrunRange = '277932-278808'
 
 FastJobs = False # controls number of jobs - true if skipping SVfit, false if computing it (jobs will be smaller)
 VeryLong = True # controls time for each job - set to true if jobs contain many real lepton pairs --> request for more grid time
