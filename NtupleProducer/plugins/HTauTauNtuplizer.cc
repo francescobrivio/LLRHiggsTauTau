@@ -129,6 +129,8 @@ using namespace edm;
 using namespace reco;
 
 
+typedef std::map<std::string, std::unique_ptr<JetCorrectionUncertainty>> myMap;
+
 // class declaration
 
 class HTauTauNtuplizer : public edm::EDAnalyzer {
@@ -155,7 +157,7 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
   //----To implement here-----
   //virtual void FillCandidate(const pat::CompositeCandidate& higgs, bool evtPass, const edm::Event&, const Int_t CRflag);
   //virtual void FillPhoton(const pat::Photon& photon);
-  int FillJet(const edm::View<pat::Jet>* jet, const edm::Event&, JetCorrectionUncertainty*);
+  int FillJet(const edm::View<pat::Jet>* jet, const edm::Event&, JetCorrectionUncertainty*, myMap*);
   void FillFatJet(const edm::View<pat::Jet>* fatjets, const edm::Event&);
   void FillSoftLeptons(const edm::View<reco::Candidate> *dauhandler, const edm::Event& event, const edm::EventSetup& setup, bool theFSR, const edm::View<pat::Jet>* jets);
   //void FillbQuarks(const edm::Event&);
@@ -172,6 +174,7 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
   bool findPrimaryVertices(const edm::Event & iEvent, const edm::EventSetup & iSetup);
   TVector3 getPCA(const edm::Event & iEvent, const edm::EventSetup & iSetup,
 		  const reco::Track *aTrack, const GlobalPoint & aPoint);
+
 
   // ----------member data ---------------------------
   //std::map <int, int> genFlagPosMap_; // to convert from input to output enum format for H/Z decays
@@ -580,6 +583,68 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
   std::vector<Int_t>   _jets_neMult;
   std::vector<Int_t>   _jets_chMult;
   std::vector<Float_t> _jets_jecUnc;
+  // JEC uncertainty sources - BEGIN:
+  std::vector<Float_t> _jets_jetUnc_AbsoluteFlavMap;
+  std::vector<Float_t> _jets_jetUnc_AbsoluteMPFBias;
+  std::vector<Float_t> _jets_jetUnc_AbsoluteScale;
+  std::vector<Float_t> _jets_jetUnc_AbsoluteStat;
+  std::vector<Float_t> _jets_jetUnc_FlavorQCD;
+  std::vector<Float_t> _jets_jetUnc_Fragmentation;
+  std::vector<Float_t> _jets_jetUnc_PileUpDataMC;
+  std::vector<Float_t> _jets_jetUnc_PileUpPtBB;
+  std::vector<Float_t> _jets_jetUnc_PileUpPtEC1;
+  std::vector<Float_t> _jets_jetUnc_PileUpPtEC2;
+  std::vector<Float_t> _jets_jetUnc_PileUpPtHF;
+  std::vector<Float_t> _jets_jetUnc_PileUpPtRef;
+  std::vector<Float_t> _jets_jetUnc_RelativeBal;
+  std::vector<Float_t> _jets_jetUnc_RelativeFSR;
+  std::vector<Float_t> _jets_jetUnc_RelativeJEREC1;
+  std::vector<Float_t> _jets_jetUnc_RelativeJEREC2;
+  std::vector<Float_t> _jets_jetUnc_RelativeJERHF;
+  std::vector<Float_t> _jets_jetUnc_RelativePtBB;
+  std::vector<Float_t> _jets_jetUnc_RelativePtEC1;
+  std::vector<Float_t> _jets_jetUnc_RelativePtEC2;
+  std::vector<Float_t> _jets_jetUnc_RelativePtHF;
+  std::vector<Float_t> _jets_jetUnc_RelativeStatEC;
+  std::vector<Float_t> _jets_jetUnc_RelativeStatFSR;
+  std::vector<Float_t> _jets_jetUnc_RelativeStatHF;
+  std::vector<Float_t> _jets_jetUnc_SinglePionECAL;
+  std::vector<Float_t> _jets_jetUnc_SinglePionHCAL;
+  std::vector<Float_t> _jets_jetUnc_TimePtEta;
+
+  myMap jecSourceUncProviders;
+  std::vector<std::string> m_jec_sources = {
+    "AbsoluteFlavMap",
+    "AbsoluteMPFBias",
+    "AbsoluteScale",
+    "AbsoluteStat",
+    "FlavorQCD",
+    "Fragmentation",
+    "PileUpDataMC",
+    "PileUpPtBB",
+    "PileUpPtEC1",
+    "PileUpPtEC2",
+    "PileUpPtHF",
+    "PileUpPtRef",
+    "RelativeBal",
+    "RelativeFSR",
+    "RelativeJEREC1",
+    "RelativeJEREC2",
+    "RelativeJERHF",
+    "RelativePtBB",
+    "RelativePtEC1",
+    "RelativePtEC2",
+    "RelativePtHF",
+    "RelativeStatEC",
+    "RelativeStatFSR",
+    "RelativeStatHF",
+    "SinglePionECAL",
+    "SinglePionHCAL",
+    "TimePtEta" };
+    
+  //std::map<std::string, std::vector<Float_t>* > _SourceUncVal;
+  std::map<std::string, std::vector<Float_t>> _SourceUncVal;
+  // :END - JEC uncertainty sources
 
   std::vector<Float_t> _jets_QGdiscr;
 
@@ -1026,6 +1091,39 @@ void HTauTauNtuplizer::Initialize(){
   _jets_HadronFlavour.clear();
   _jets_genjetIndex.clear();
   _jets_jecUnc.clear();
+  // JEC uncertainty sources - BEGIN:
+  _jets_jetUnc_AbsoluteFlavMap.clear();
+  _jets_jetUnc_AbsoluteMPFBias.clear();
+  _jets_jetUnc_AbsoluteScale.clear();
+  _jets_jetUnc_AbsoluteStat.clear();
+  _jets_jetUnc_FlavorQCD.clear();
+  _jets_jetUnc_Fragmentation.clear();
+  _jets_jetUnc_PileUpDataMC.clear();
+  _jets_jetUnc_PileUpPtBB.clear();
+  _jets_jetUnc_PileUpPtEC1.clear();
+  _jets_jetUnc_PileUpPtEC2.clear();
+  _jets_jetUnc_PileUpPtHF.clear();
+  _jets_jetUnc_PileUpPtRef.clear();
+  _jets_jetUnc_RelativeBal.clear();
+  _jets_jetUnc_RelativeFSR.clear();
+  _jets_jetUnc_RelativeJEREC1.clear();
+  _jets_jetUnc_RelativeJEREC2.clear();
+  _jets_jetUnc_RelativeJERHF.clear();
+  _jets_jetUnc_RelativePtBB.clear();
+  _jets_jetUnc_RelativePtEC1.clear();
+  _jets_jetUnc_RelativePtEC2.clear();
+  _jets_jetUnc_RelativePtHF.clear();
+  _jets_jetUnc_RelativeStatEC.clear();
+  _jets_jetUnc_RelativeStatFSR.clear();
+  _jets_jetUnc_RelativeStatHF.clear();
+  _jets_jetUnc_SinglePionECAL.clear();
+  _jets_jetUnc_SinglePionHCAL.clear();
+  _jets_jetUnc_TimePtEta.clear();
+  for (std::map<std::string, std::vector<Float_t> >::iterator it=_SourceUncVal.begin(); it!=_SourceUncVal.end(); ++it)
+    {
+      it->second.clear();
+    }
+
   _jets_QGdiscr.clear();
   _numberOfJets=0;
   _bdiscr.clear();
@@ -1365,6 +1463,63 @@ void HTauTauNtuplizer::beginJob(){
   myTree->Branch("jets_neMult" , &_jets_neMult);
   myTree->Branch("jets_chMult" , &_jets_chMult);
   myTree->Branch("jets_jecUnc" , &_jets_jecUnc);
+  // JEC Uncertainty sources - BEGIN:
+  /*myTree->Branch("jets_jetUnc_AbsoluteFlavMap" , &_jets_jetUnc_AbsoluteFlavMap);
+  myTree->Branch("jets_jetUnc_AbsoluteMPFBias" , &_jets_jetUnc_AbsoluteMPFBias);
+  myTree->Branch("jets_jetUnc_AbsoluteScale" , &_jets_jetUnc_AbsoluteScale);
+  myTree->Branch("jets_jetUnc_AbsoluteStat" , &_jets_jetUnc_AbsoluteStat);
+  myTree->Branch("jets_jetUnc_FlavorQCD" , &_jets_jetUnc_FlavorQCD);
+  myTree->Branch("jets_jetUnc_Fragmentation" , &_jets_jetUnc_Fragmentation);
+  myTree->Branch("jets_jetUnc_PileUpDataMC" , &_jets_jetUnc_PileUpDataMC);
+  myTree->Branch("jets_jetUnc_PileUpPtBB" , &_jets_jetUnc_PileUpPtBB);
+  myTree->Branch("jets_jetUnc_PileUpPtEC1" , &_jets_jetUnc_PileUpPtEC1);
+  myTree->Branch("jets_jetUnc_PileUpPtEC2" , &_jets_jetUnc_PileUpPtEC2);
+  myTree->Branch("jets_jetUnc_PileUpPtHF" , &_jets_jetUnc_PileUpPtHF);
+  myTree->Branch("jets_jetUnc_PileUpPtRef" , &_jets_jetUnc_PileUpPtRef);
+  myTree->Branch("jets_jetUnc_RelativeBal" , &_jets_jetUnc_RelativeBal);
+  myTree->Branch("jets_jetUnc_RelativeFSR" , &_jets_jetUnc_RelativeFSR);
+  myTree->Branch("jets_jetUnc_RelativeJEREC1" , &_jets_jetUnc_RelativeJEREC1);
+  myTree->Branch("jets_jetUnc_RelativeJEREC2" , &_jets_jetUnc_RelativeJEREC2);
+  myTree->Branch("jets_jetUnc_RelativeJERHF" , &_jets_jetUnc_RelativeJERHF);
+  myTree->Branch("jets_jetUnc_RelativePtBB" , &_jets_jetUnc_RelativePtBB);
+  myTree->Branch("jets_jetUnc_RelativePtEC1" , &_jets_jetUnc_RelativePtEC1);
+  myTree->Branch("jets_jetUnc_RelativePtEC2" , &_jets_jetUnc_RelativePtEC2);
+  myTree->Branch("jets_jetUnc_RelativePtHF" , &_jets_jetUnc_RelativePtHF);
+  myTree->Branch("jets_jetUnc_RelativeStatEC" , &_jets_jetUnc_RelativeStatEC);
+  myTree->Branch("jets_jetUnc_RelativeStatFSR" , &_jets_jetUnc_RelativeStatFSR);
+  myTree->Branch("jets_jetUnc_RelativeStatHF" , &_jets_jetUnc_RelativeStatHF);
+  myTree->Branch("jets_jetUnc_SinglePionECAL" , &_jets_jetUnc_SinglePionECAL);
+  myTree->Branch("jets_jetUnc_SinglePionHCAL" , &_jets_jetUnc_SinglePionHCAL);
+  myTree->Branch("jets_jetUnc_TimePtEta" , &_jets_jetUnc_TimePtEta);*/
+  myTree->Branch("jets_jetUnc_AbsoluteFlavMap"  , &_SourceUncVal["AbsoluteFlavMap"]);
+  myTree->Branch("jets_jetUnc_AbsoluteMPFBias"  , &_SourceUncVal["AbsoluteMPFBias"]);
+  myTree->Branch("jets_jetUnc_AbsoluteScale"    , &_SourceUncVal["AbsoluteScale"]);
+  myTree->Branch("jets_jetUnc_AbsoluteStat"     , &_SourceUncVal["AbsoluteStat"]);
+  myTree->Branch("jets_jetUnc_FlavorQCD"        , &_SourceUncVal["FlavorQCD"]);
+  myTree->Branch("jets_jetUnc_Fragmentation"    , &_SourceUncVal["Fragmentation"]);
+  myTree->Branch("jets_jetUnc_PileUpDataMC"     , &_SourceUncVal["PileUpDataMC"]);
+  myTree->Branch("jets_jetUnc_PileUpPtBB"       , &_SourceUncVal["PileUpPtBB"]);
+  myTree->Branch("jets_jetUnc_PileUpPtEC1"      , &_SourceUncVal["PileUpPtEC1"]);
+  myTree->Branch("jets_jetUnc_PileUpPtEC2"      , &_SourceUncVal["PileUpPtEC2"]);
+  myTree->Branch("jets_jetUnc_PileUpPtHF"       , &_SourceUncVal["PileUpPtHF"]);
+  myTree->Branch("jets_jetUnc_PileUpPtRef"      , &_SourceUncVal["PileUpPtRef"]);
+  myTree->Branch("jets_jetUnc_RelativeBal"      , &_SourceUncVal["RelativeBal"]);
+  myTree->Branch("jets_jetUnc_RelativeFSR"      , &_SourceUncVal["RelativeFSR"]);
+  myTree->Branch("jets_jetUnc_RelativeJEREC1"   , &_SourceUncVal["RelativeJEREC1"]);
+  myTree->Branch("jets_jetUnc_RelativeJEREC2"   , &_SourceUncVal["RelativeJEREC2"]);
+  myTree->Branch("jets_jetUnc_RelativeJERHF"    , &_SourceUncVal["RelativeJERHF"]);
+  myTree->Branch("jets_jetUnc_RelativePtBB"     , &_SourceUncVal["RelativePtBB"]);
+  myTree->Branch("jets_jetUnc_RelativePtEC1"    , &_SourceUncVal["RelativePtEC1"]);
+  myTree->Branch("jets_jetUnc_RelativePtEC2"    , &_SourceUncVal["RelativePtEC2"]);
+  myTree->Branch("jets_jetUnc_RelativePtHF"     , &_SourceUncVal["RelativePtHF"]);
+  myTree->Branch("jets_jetUnc_RelativeStatEC"   , &_SourceUncVal["RelativeStatEC"]);
+  myTree->Branch("jets_jetUnc_RelativeStatFSR"  , &_SourceUncVal["RelativeStatFSR"]);
+  myTree->Branch("jets_jetUnc_RelativeStatHF"   , &_SourceUncVal["RelativeStatHF"]);
+  myTree->Branch("jets_jetUnc_SinglePionECAL"   , &_SourceUncVal["SinglePionECAL"]);
+  myTree->Branch("jets_jetUnc_SinglePionHCAL"   , &_SourceUncVal["SinglePionHCAL"]);
+  myTree->Branch("jets_jetUnc_TimePtEta"        , &_SourceUncVal["TimePtEta"]);
+  
+  // :END - JEC Uncertainty sources
 
   myTree->Branch("bDiscriminator",&_bdiscr);
   myTree->Branch("bCSVscore",&_bdiscr2);
@@ -1431,6 +1586,36 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
   Handle<vector<reco::Vertex> >  vertexs;
   //event.getByLabel("offlineSlimmedPrimaryVertices",vertex);
   event.getByToken(theVtxTag,vertexs);
+  
+  // JEC fill map with "sourceName, var"
+  _SourceUncVal.emplace("AbsoluteFlavMap" ,_jets_jetUnc_AbsoluteFlavMap);
+  _SourceUncVal.emplace("AbsoluteMPFBias" ,_jets_jetUnc_AbsoluteMPFBias);
+  _SourceUncVal.emplace("AbsoluteScale"   ,_jets_jetUnc_AbsoluteScale);
+  _SourceUncVal.emplace("AbsoluteStat"    ,_jets_jetUnc_AbsoluteStat);
+  _SourceUncVal.emplace("FlavorQCD"       ,_jets_jetUnc_FlavorQCD);
+  _SourceUncVal.emplace("Fragmentation"   ,_jets_jetUnc_Fragmentation);
+  _SourceUncVal.emplace("PileUpDataMC"    ,_jets_jetUnc_PileUpDataMC);
+  _SourceUncVal.emplace("PileUpPtBB"      ,_jets_jetUnc_PileUpPtBB);
+  _SourceUncVal.emplace("PileUpPtEC1"     ,_jets_jetUnc_PileUpPtEC1);
+  _SourceUncVal.emplace("PileUpPtEC2"     ,_jets_jetUnc_PileUpPtEC2);
+  _SourceUncVal.emplace("PileUpPtHF"      ,_jets_jetUnc_PileUpPtHF);
+  _SourceUncVal.emplace("PileUpPtRef"     ,_jets_jetUnc_PileUpPtRef);
+  _SourceUncVal.emplace("RelativeBal"     ,_jets_jetUnc_RelativeBal);
+  _SourceUncVal.emplace("RelativeFSR"     ,_jets_jetUnc_RelativeFSR);
+  _SourceUncVal.emplace("RelativeJEREC1"  ,_jets_jetUnc_RelativeJEREC1);
+  _SourceUncVal.emplace("RelativeJEREC2"  ,_jets_jetUnc_RelativeJEREC2);
+  _SourceUncVal.emplace("RelativeJERHF"   ,_jets_jetUnc_RelativeJERHF);
+  _SourceUncVal.emplace("RelativePtBB"    ,_jets_jetUnc_RelativePtBB);
+  _SourceUncVal.emplace("RelativePtEC1"   ,_jets_jetUnc_RelativePtEC1);
+  _SourceUncVal.emplace("RelativePtEC2"   ,_jets_jetUnc_RelativePtEC2);
+  _SourceUncVal.emplace("RelativePtHF"    ,_jets_jetUnc_RelativePtHF);
+  _SourceUncVal.emplace("RelativeStatEC"  ,_jets_jetUnc_RelativeStatEC);
+  _SourceUncVal.emplace("RelativeStatFSR" ,_jets_jetUnc_RelativeStatFSR);
+  _SourceUncVal.emplace("RelativeStatHF"  ,_jets_jetUnc_RelativeStatHF);
+  _SourceUncVal.emplace("SinglePionECAL"  ,_jets_jetUnc_SinglePionECAL);
+  _SourceUncVal.emplace("SinglePionHCAL"  ,_jets_jetUnc_SinglePionHCAL);
+  _SourceUncVal.emplace("TimePtEta"       ,_jets_jetUnc_TimePtEta);
+  
   
   //----------------------------------------------------------------------
   // Analyze MC history. THIS HAS TO BE DONE BEFORE ANY RETURN STATEMENT
@@ -1627,10 +1812,18 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
   eSetup.get<JetCorrectionsRecord>().get("AK4PFchs",JetCorParColl); 
   JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
   JetCorrectionUncertainty jecUnc (JetCorPar);
+    
+  // Accessing the JEC uncertainties sources
+  for (const auto& source: m_jec_sources) {
+    JetCorrectorParameters source_parameters("../data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt", source);
+    std::unique_ptr<JetCorrectionUncertainty> source_uncertainty(new JetCorrectionUncertainty(source_parameters));
+    jecSourceUncProviders.emplace(source, std::move(source_uncertainty));
+  }
+  
   _numberOfJets = 0;
   if(writeJets){
-    _numberOfJets = FillJet(jets, event, &jecUnc);
-
+    _numberOfJets = FillJet(jets, event, &jecUnc, &jecSourceUncProviders);
+    
     if(computeQGVar){ //Needs jetHandle + qgTaggerHandle
       for(auto jet = jetHandle->begin(); jet != jetHandle->end(); ++jet){
 	edm::RefToBase<pat::Jet> jetRef(edm::Ref<edm::View<pat::Jet> >(jetHandle, jet - jetHandle->begin()));
@@ -1852,12 +2045,14 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
     myTree->Fill(fillArray);*/
     //iMot++;
   }
+  //std::cout << " ---    EVENT   ---" << std::endl;
+  //std::cout << "---------------------->  prima di Fill   : " << _SourceUncVal["FlavorQCD"][0] <<std::endl;
   myTree->Fill();
   //return;
 }
 
 //Fill jets quantities
-int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event& event, JetCorrectionUncertainty* jecUnc){
+int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event& event, JetCorrectionUncertainty* jecUnc, myMap* jecSourceUncProviders){
   int nJets=0;
   vector <pair<float, int>> softLeptInJet; // pt, idx 
   for(edm::View<pat::Jet>::const_iterator ijet = jets->begin(); ijet!=jets->end();++ijet){
@@ -2022,6 +2217,20 @@ int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event&
     jecUnc->setJetEta(ijet->eta());
     jecUnc->setJetPt(ijet->pt()); // here you must use the CORRECTED jet pt
     _jets_jecUnc.push_back(jecUnc->getUncertainty(true));
+    
+    // JEC uncertainties sources
+    //std::cout << "--------- JET -----------: " << std::endl;
+    for (myMap::iterator it=jecSourceUncProviders->begin(); it!=jecSourceUncProviders->end(); ++it)
+    {
+      it->second->setJetEta(ijet->eta());
+      it->second->setJetPt(ijet->pt());
+      float uncertainty = it->second->getUncertainty(true);
+      //std::cout << "-------------------------------------> it->first: " << it->first << "\t - val: " << uncertainty <<std::endl;
+
+      _SourceUncVal[it->first].push_back(uncertainty);
+      //std::cout << "------------------------------------->     dopo: " << _SourceUncVal[it->first][0] <<std::endl;
+    }
+
   }
 
 
