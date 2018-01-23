@@ -12,6 +12,9 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'analyzer.py' # to produce LLR ntuples or EnrichedMiniAOD according to the RunNtuplizer bool
 config.JobType.sendExternalFolder = True #Needed until the PR including the Spring16 ele MVA ID is integrated in CMSSW/cms-data.
 
+#config.JobType.inputFiles=['/afs/cern.ch/work/f/fbrivio/Hhh_1718/JES_unc/CMSSW_8_0_26_patch1/src/LLRHiggsTauTau/NtupleProducer/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt']
+config.JobType.inputFiles=['Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt']
+
 config.section_("Data")
 config.Data.inputDataset = '/my/precious/dataset'
 config.Data.inputDBS = 'global'

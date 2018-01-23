@@ -1815,7 +1815,8 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
     
   // Accessing the JEC uncertainties sources
   for (const auto& source: m_jec_sources) {
-    JetCorrectorParameters source_parameters("../data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt", source);
+    JetCorrectorParameters source_parameters("Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt", source);
+    //JetCorrectorParameters source_parameters("/afs/cern.ch/work/f/fbrivio/Hhh_1718/JES_unc/CMSSW_8_0_26_patch1/src/LLRHiggsTauTau/NtupleProducer/data/Summer16_23Sep2016V4_MC_UncertaintySources_AK4PFchs.txt", source);
     std::unique_ptr<JetCorrectionUncertainty> source_uncertainty(new JetCorrectionUncertainty(source_parameters));
     jecSourceUncProviders.emplace(source, std::move(source_uncertainty));
   }

@@ -26,10 +26,10 @@ USE_NOHFMET = False # True to exclude HF and run on silver json
 SVFITBYPASS=False # use SVFitBypass module, no SVfit computation, adds dummy userfloats for MET and SVfit mass
 BUILDONLYOS=False #If true don't create the collection of SS candidates (and thus don't run SV fit on them)
 APPLYTESCORRECTION=True # shift the central value of the tau energy scale before computing up/down variations
-COMPUTEUPDOWNSVFIT=True # compute SVfit for up/down TES variation
+COMPUTEUPDOWNSVFIT=False # compute SVfit for up/down TES variation
 doCPVariables=False # compute CP variables and PV refit
 COMPUTEQGVAR = False # compute QG Tagger for jets
-IsMC=True
+IsMC=False
 Is25ns=True
 HLTProcessName='HLT' #Different names possible, check e.g. at https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD.
 if not IsMC:
@@ -88,17 +88,21 @@ process.source = cms.Source("PoolSource",
 	
 	# - FILES -
 	#'/store/data/Run2016F/SingleMuon/MINIAOD/03Feb2017-v1/100000/00E6AB6D-BCEC-E611-8F6E-0025905C3D98.root',
-	'/store/mc/RunIISummer16MiniAODv2/GluGluToRadionToHHTo2B2Tau_M-270_narrow_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/E8729C09-A1DE-E611-9CB3-0CC47A4C8E66.root', #49k
+	#'/store/mc/RunIISummer16MiniAODv2/GluGluToRadionToHHTo2B2Tau_M-270_narrow_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/E8729C09-A1DE-E611-9CB3-0CC47A4C8E66.root', #49k
 	#'/store/mc/RunIISummer16MiniAODv2/GluGluToRadionToHHTo2B2Tau_M-500_narrow_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/B661A261-A2DB-E611-A61D-44A84223FF3C.root', #49k
 	#'/store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/120000/02A210D6-F5C3-E611-B570-008CFA197BD4.root', #136k
 	#'/store/mc/RunIISummer16MiniAODv2/TTToSemilepton_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0031D8B1-F1C9-E611-914A-047D7B416516.root', #88k
+    
+    # DATA
+    '/store/data/Run2016H/SingleMuon/MINIAOD/03Feb2017_ver2-v1/110000/00633FF0-85EA-E611-811C-001E674FB25C.root'
+    
     )
 )
 
 # process.source.skipEvents = cms.untracked.uint32(968)
 
 #Limited nEv for testing purposes. -1 to run all events
-process.maxEvents.input = -1
+process.maxEvents.input = 50
 
 # JSON mask for data --> defined in the lumiMask file
 # from JSON file

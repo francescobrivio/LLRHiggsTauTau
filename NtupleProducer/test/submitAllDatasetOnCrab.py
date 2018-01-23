@@ -165,13 +165,33 @@ import re
 #tag = "Legacy_Lug2017"
 #datasetsFile = "datasets.txt"
 
-PROCESS = ["MCLEGACYTEST"]
+#PROCESS = ["MCLEGACYTEST"]
 #tag = "Legacy_Radion300_Lug2017"
-tag = "Legacy_DY_Lug2017"
-tag = "Legacy_SMhh_Lug2017"
-datasetsFile = "datasets.txt"
+#tag = "Legacy_DY_Lug2017"
+#tag = "Legacy_SMhh_Lug2017"
+#datasetsFile = "datasets.txt"
 
-isMC = True
+#PROCESS = ["JECJULY2017"]
+#tag = "JEC_8Lug2017"
+#datasetsFile = "datasets_JEC.txt"
+
+#PROCESS = ["TESTJECJULY2017"]
+#tag = "TEST_JEC_8Lug2017"
+#datasetsFile = "datasets_JEC.txt"
+
+#PROCESS = ["VBFDEC2017"]
+#tag = "VBF_15Dec2017"
+#datasetsFile = "datasets_VBF.txt"
+
+#PROCESS = ["VBFDATADEC2017"]
+#tag = "VBF_15Dec2017_DATA"
+#datasetsFile = "datasets_VBF.txt"
+
+PROCESS = ["TAUDATADEC2017"]
+tag = "Tau_Data2016_22Dec2017"
+datasetsFile = "datasets_VBF.txt"
+
+isMC = False
 #twiki page with JSON files info https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2015Analysis
 #50ns JSON file to be used on 2015B and 2015C PDs - integrated luminosity: 71.52/pb - 18/09/2015
 #lumiMaskFileName = "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-255031_13TeV_PromptReco_Collisions15_50ns_JSON_v2.txt"
