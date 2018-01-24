@@ -1448,7 +1448,7 @@ void HTauTauNtuplizer::beginJob(){
   myTree->Branch("jets_genjetIndex", &_jets_genjetIndex);
   myTree->Branch("jets_PUJetID",&_jets_PUJetID);
   myTree->Branch("jets_PUJetIDupdated",&_jets_PUJetIDupdated);
-  myTree->Branch("jets_PUJetIDupdated_id",&_jets_PUJetIDupdated_WP);
+  myTree->Branch("jets_PUJetIDupdated_WP",&_jets_PUJetIDupdated_WP);
   myTree->Branch("jets_vtxPt", &_jets_vtxPt);
   myTree->Branch("jets_vtxMass", &_jets_vtxMass);
   myTree->Branch("jets_vtx3dL", &_jets_vtx3dL);
