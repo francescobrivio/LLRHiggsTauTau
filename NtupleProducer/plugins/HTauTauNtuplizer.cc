@@ -566,6 +566,7 @@ class HTauTauNtuplizer : public edm::EDAnalyzer {
   std::vector<Float_t> _jets_mT;
   std::vector<Float_t> _jets_PUJetID;
   std::vector<Float_t> _jets_PUJetIDupdated;
+  std::vector<Int_t>   _jets_PUJetIDupdated_WP;
   std::vector<Float_t> _jets_vtxPt;
   std::vector<Float_t> _jets_vtxMass;
   std::vector<Float_t> _jets_vtx3dL;
@@ -1071,6 +1072,7 @@ void HTauTauNtuplizer::Initialize(){
   _jets_mT.clear();
   _jets_PUJetID.clear();
   _jets_PUJetIDupdated.clear();
+  _jets_PUJetIDupdated_WP.clear();
   _jets_vtxPt.clear();
   _jets_vtxMass.clear();
   _jets_vtx3dL.clear();
@@ -1446,6 +1448,7 @@ void HTauTauNtuplizer::beginJob(){
   myTree->Branch("jets_genjetIndex", &_jets_genjetIndex);
   myTree->Branch("jets_PUJetID",&_jets_PUJetID);
   myTree->Branch("jets_PUJetIDupdated",&_jets_PUJetIDupdated);
+  myTree->Branch("jets_PUJetIDupdated_id",&_jets_PUJetIDupdated_WP);
   myTree->Branch("jets_vtxPt", &_jets_vtxPt);
   myTree->Branch("jets_vtxMass", &_jets_vtxMass);
   myTree->Branch("jets_vtx3dL", &_jets_vtx3dL);
@@ -2054,6 +2057,7 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
 
 //Fill jets quantities
 int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event& event, JetCorrectionUncertainty* jecUnc, myMap* jecSourceUncProviders){
+  cout << " ------ EVENT --" << endl;
   int nJets=0;
   vector <pair<float, int>> softLeptInJet; // pt, idx 
   for(edm::View<pat::Jet>::const_iterator ijet = jets->begin(); ijet!=jets->end();++ijet){
@@ -2067,6 +2071,20 @@ int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event&
     _jets_HadronFlavour.push_back(ijet->hadronFlavour());
     _jets_PUJetID.push_back(ijet->userFloat("pileupJetId:fullDiscriminant"));
     _jets_PUJetIDupdated.push_back(ijet->hasUserFloat("pileupJetIdUpdated:fullDiscriminant") ? ijet->userFloat("pileupJetIdUpdated:fullDiscriminant") : -999);
+    _jets_PUJetIDupdated_WP.push_back(ijet->hasUserInt("pileupJetIdUpdated:fullId") ? ijet->userInt("pileupJetIdUpdated:fullId") : -999);
+    
+    cout << " - PU jet ID discriminants - "<<endl; //FRA
+    if (ijet->hasUserFloat("pileupJetIdUpdated:fullDiscriminant"))
+    {
+        cout << " ijet: " << nJets << endl;
+        cout << "    fullDiscr: " << ijet->userFloat("pileupJetId:fullDiscriminant") << endl;
+        cout << "    updated  : " << ijet->userFloat("pileupJetIdUpdated:fullDiscriminant") << endl;
+        cout << "    updID    : " << ijet->userInt("pileupJetIdUpdated:fullId") << endl;
+        cout << "    Loose: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 2)) << " - Medium: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 1))
+        << " - Tight: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 0)) << endl;
+    }
+
+    
     float vtxPx = ijet->userFloat ("vtxPx");
     float vtxPy = ijet->userFloat ("vtxPy");
     _jets_vtxPt.  push_back(TMath::Sqrt(vtxPx*vtxPx + vtxPy*vtxPy));
