@@ -114,7 +114,7 @@ process.maxEvents.input = 20
 ## Output file
 ##
 
-process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis_PUjetID.root'))
+process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis.root'))
 
 if DO_ENRICHED:
     process.out = cms.OutputModule("PoolOutputModule",

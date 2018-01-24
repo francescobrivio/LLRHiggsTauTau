@@ -2057,7 +2057,6 @@ void HTauTauNtuplizer::analyze(const edm::Event& event, const edm::EventSetup& e
 
 //Fill jets quantities
 int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event& event, JetCorrectionUncertainty* jecUnc, myMap* jecSourceUncProviders){
-  cout << " ------ EVENT --" << endl;
   int nJets=0;
   vector <pair<float, int>> softLeptInJet; // pt, idx 
   for(edm::View<pat::Jet>::const_iterator ijet = jets->begin(); ijet!=jets->end();++ijet){
@@ -2073,7 +2072,8 @@ int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event&
     _jets_PUJetIDupdated.push_back(ijet->hasUserFloat("pileupJetIdUpdated:fullDiscriminant") ? ijet->userFloat("pileupJetIdUpdated:fullDiscriminant") : -999);
     _jets_PUJetIDupdated_WP.push_back(ijet->hasUserInt("pileupJetIdUpdated:fullId") ? ijet->userInt("pileupJetIdUpdated:fullId") : -999);
     
-    cout << " - PU jet ID discriminants - "<<endl; //FRA
+    /* // Debug of PUjetID values and discriminants
+    cout << " - PU jet ID discriminants - "<<endl;
     if (ijet->hasUserFloat("pileupJetIdUpdated:fullDiscriminant"))
     {
         cout << " ijet: " << nJets << endl;
@@ -2082,7 +2082,7 @@ int HTauTauNtuplizer::FillJet(const edm::View<pat::Jet> *jets, const edm::Event&
         cout << "    updID    : " << ijet->userInt("pileupJetIdUpdated:fullId") << endl;
         cout << "    Loose: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 2)) << " - Medium: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 1))
         << " - Tight: " << bool(ijet->userInt("pileupJetIdUpdated:fullId") & (1 << 0)) << endl;
-    }
+    }*/
 
     
     float vtxPx = ijet->userFloat ("vtxPx");
