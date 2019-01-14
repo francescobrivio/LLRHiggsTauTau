@@ -147,6 +147,20 @@ process.source = cms.Source("PoolSource",
 
     # DY 2 Jets
     #'/store/mc/RunIIFall17MiniAODv2/DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/810000/BAE0A78F-7366-E811-B871-A0369FD20D18.root'
+    
+    #'/store/mc/RunIIFall17MiniAODv2/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/6435B3B7-8342-E811-B249-0CC47A5FA3BD.root'
+    
+    
+    # VBF private production test
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/nevts_1000/HIG-RunIIFall17MiniAODv2-01157.root'
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/nevts_1000_2/HIG-RunIIFall17MiniAODv2-01157.root'
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_1.root',
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_2.root',
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_3.root',
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_4.root',
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_5.root',
+    #'file:/afs/cern.ch/work/f/fbrivio/Hhh_1718/TEST_PRODUCTION/CMSSW_9_4_6_patch1/src/HIG-RunIIFall17MiniAODv2-01157_6.root',
+    
     )
 )
 
@@ -155,6 +169,7 @@ process.source = cms.Source("PoolSource",
 #process.source.eventsToProcess = cms.untracked.VEventRange("1:26669:46950527-1:26669:46950527")
 #process.source.eventsToProcess = cms.untracked.VEventRange("1:7:5757-1:7:5757")
 #process.source.eventsToProcess = cms.untracked.VEventRange("305902:212:301932757-305902:212:301932757")
+#process.source.eventsToProcess = cms.untracked.VEventRange("1:493:476100-1:493:476100")
 
 #Limited nEv for testing purposes. -1 to run all events
 process.maxEvents.input = -1
@@ -169,6 +184,7 @@ if not IsMC:
 ## Output file
 ##
 process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis.root'))
+#process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis_VBF_6.root'))
 #process.TFileService=cms.Service('TFileService',fileName=cms.string('HTauTauAnalysis_TauDataF_eighteen.root'))
 
 # L1 trigger objects (as suggested on: https://twiki.cern.ch/twiki/bin/view/CMS/HiggsToTauTauWorking2017#Trigger_Information )

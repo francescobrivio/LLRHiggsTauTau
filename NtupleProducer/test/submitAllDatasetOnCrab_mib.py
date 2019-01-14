@@ -42,9 +42,51 @@ import re
 #tag = "Data2017BF_31Mar2018ReReco_17May2018"
 #datasetsFile = "datasets_Fall17_15May2018.txt"
 
-PROCESS = ["MINIAODFALL17v2"]
-tag = "MC_25June2018"
-datasetsFile = "datasets_Fall17_15May2018.txt"
+# miniAOD_v2 Fall17
+#PROCESS = ["BACKGROUNDS_Fall2017"]
+#tag = "MC_26June2018"
+#datasetsFile = "datasetsFall17.txt"
+
+# Special ZZTo4L (Fall17)
+#PROCESS = ["BACKGROUNDS_Fall2017_ZZ4L"]
+#tag = "MC_28June2018_ZZ4L"
+#datasetsFile = "datasetsFall17.txt"
+
+# Special DY4Jets (Fall17)
+#PROCESS = ["BACKGROUNDS_Fall2017_DY4J"]
+#tag = "MC_28June2018_DY4J"
+#datasetsFile = "datasetsFall17.txt"
+
+# miniAOD_v2 Fall17
+#PROCESS = ["SIG_Fall17"]
+#tag = "MC_3July2018"
+#datasetsFile = "datasetsFall17.txt"
+
+# miniAOD_v2 Fall17
+#PROCESS = ["Special_allFail_Fall17"]
+#tag = "MC_4July2018_allFail"
+#tag = "MC_4July2018_allFail_ignoreLocality"
+#datasetsFile = "datasetsFall17.txt"
+
+# Special DY4Jets (Fall17)
+#PROCESS = ["BACKGROUNDS_Fall2017_DY4J"]
+#tag = "MC_7July2018_DY4J"
+#datasetsFile = "datasetsFall17.txt"
+
+# miniAOD_v2 Fall17
+#PROCESS = ["SIG_Fall17_nonResonant"]
+#tag = "MC_24July2018"
+#datasetsFile = "datasetsFall17.txt"
+
+# miniAOD_v2 Fall17
+#PROCESS = ["GGH_Fall2017_nonResonant"]
+#tag = "MC_14JOct2018"
+#datasetsFile = "datasetsFall17.txt"
+
+# miniAOD_v2 Fall17
+PROCESS = ["SIGNALS_tesi"]
+tag = "MC_23JOct2018_signalsTESI"
+datasetsFile = "datasetsFall17.txt"
 
 isMC = True
 #twiki page with JSON files info https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmV2015Analysis
@@ -179,6 +221,10 @@ for dtset in dtsetToLaunch:
 
     #dtSetName = dtsetNames[1]
     command = "crab submit -c crab3_template_mib.py"
+    #command = "crab submit -c crab3_template_mib_ZZ4L.py"
+    #command = "crab submit -c crab3_template_mib_DY4J.py"
+    #command = "crab submit -c crab3_template_mib_allFail.py"
+
     #command += " General.requestName=%s" % (dtsetNames + "_" + tag + "_" + str(counter))
     command += " General.requestName=%s" % (shortName + "_" + str(counter))
     command += " General.workArea=%s" % crabJobsFolder
